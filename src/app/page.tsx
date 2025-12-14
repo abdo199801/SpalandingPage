@@ -1,26 +1,110 @@
-// src/app/page.js
+// src/app/page.tsx
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles, Heart, Star, Clock, Users, Award,
   MessageCircle, ChevronDown, Send, ArrowRight, CheckCircle,
   Phone, Mail, MapPin, Menu, X,
   Briefcase, Check, Calendar, ChevronLeft, ChevronRight, Leaf, Crown,
-  Diamond, Gem, Sparkle, Droplet, Flower,
+  Diamond, Gem, Droplet, Flower,
   Instagram as InstagramIcon, Facebook as FacebookIcon,
   Youtube as YoutubeIcon, MapPin as MapPinIcon,
   Clock as ClockIcon, Award as AwardIcon
 } from 'lucide-react';
 
+// Type Definitions
+interface AnimatedCounterProps {
+  value: string;
+  suffix?: string;
+}
+
+interface Service {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  features: string[];
+  color: string;
+  accentColor: string;
+  price: string;
+  duration: string;
+  gradient: string;
+}
+
+interface Treatment {
+  name: string;
+  description: string;
+  benefits: string[];
+  duration: string;
+  price: string;
+  icon: React.ReactNode;
+  gradient: string;
+}
+
+interface Therapist {
+  name: string;
+  specialty: string;
+  experience: string;
+  certifications: string[];
+  availability: string;
+  description: string;
+  specialties: string[];
+  rating: number;
+  gradient: string;
+}
+
+interface Testimonial {
+  name: string;
+  role: string;
+  content: string;
+  treatment: string;
+  duration: string;
+  rating: number;
+  image: string;
+  gradient: string;
+}
+
+interface Stat {
+  value: string;
+  suffix?: string;
+  label: string;
+  icon: React.ReactNode;
+  description: string;
+}
+
+interface Package {
+  name: string;
+  price: string;
+  duration: string;
+  features: string[];
+  color: string;
+  accentColor: string;
+  popular: boolean;
+  gradient: string;
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  treatment: string;
+  date: string;
+  time: string;
+  therapist: string;
+  preferences: string;
+  message: string;
+}
+
 // Animated Counter Component
-const AnimatedCounter = ({ value, suffix = "" }) => {
+const AnimatedCounter = ({ value, suffix = "" }: AnimatedCounterProps) => {
   const [count, setCount] = useState(0);
   
   useEffect(() => {
     let start = 0;
     const end = parseInt(value);
+    if (isNaN(end)) return;
+    
     const duration = 2000;
     const increment = end / (duration / 16);
     
@@ -41,24 +125,24 @@ const AnimatedCounter = ({ value, suffix = "" }) => {
 };
 
 // Enhanced Quote Icon component
-const Quote = ({ className }) => (
+const Quote = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 32 32">
     <path d="M10 16C10 9.37258 15.3726 4 22 4V8C18.6863 8 16 10.6863 16 14V24H10V16ZM26 16C26 9.37258 31.3726 4 38 4V8C34.6863 8 32 10.6863 32 14V24H26V16Z"/>
   </svg>
 );
 
 export default function BeauteSpaCenter() {
-  // State Management - Only keep used states
+  // State Management
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [activeTreatment, setActiveTreatment] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   // Form State
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
@@ -71,12 +155,12 @@ export default function BeauteSpaCenter() {
   });
 
   // Refs
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
-  // Data arrays (same as before, but simplified imports)
-  const services = [
+  // Data arrays
+  const services: Service[] = [
     {
-      icon: <Sparkle className="w-10 h-10" />,
+      icon: <Sparkles className="w-10 h-10" />,
       title: 'Soins du Visage',
       description: 'Traitements visage personnalisés pour une peau rayonnante et rajeunie.',
       features: ['Nettoyage profond', 'Hydratation intensive', 'Anti-âge', 'Luminosité'],
@@ -121,7 +205,7 @@ export default function BeauteSpaCenter() {
     }
   ];
 
-  const treatments = [
+  const treatments: Treatment[] = [
     {
       name: 'Rituel Anti-âge Or',
       description: 'Traitement signature utilisant des produits à base d\'or 24 carats et de diamants pour un éclat incomparable.',
@@ -151,7 +235,7 @@ export default function BeauteSpaCenter() {
     }
   ];
 
-  const therapists = [
+  const therapists: Therapist[] = [
     {
       name: 'Élise Moreau',
       specialty: 'Esthéticienne Diplômée',
@@ -187,7 +271,7 @@ export default function BeauteSpaCenter() {
     }
   ];
 
-  const testimonials = [
+  const testimonials: Testimonial[] = [
     {
       name: 'Claire Martin',
       role: 'Cliente VIP',
@@ -220,7 +304,7 @@ export default function BeauteSpaCenter() {
     }
   ];
 
-  const stats = [
+  const stats: Stat[] = [
     { value: '98', suffix: '%', label: 'Satisfaction Clients', icon: <Heart className="w-6 h-6" />, description: 'Taux de satisfaction' },
     { value: '5200', suffix: '+', label: 'Clients Heureux', icon: <Users className="w-6 h-6" />, description: 'Depuis notre ouverture' },
     { value: '15', label: 'Experts Certifiés', icon: <Award className="w-6 h-6" />, description: 'Thérapeutes diplômés' },
@@ -229,7 +313,7 @@ export default function BeauteSpaCenter() {
     { value: '24/7', label: 'Réservation', icon: <Clock className="w-6 h-6" />, description: 'En ligne & immédiate' }
   ];
 
-  const packages = [
+  const packages: Package[] = [
     {
       name: 'Découverte',
       price: '190€',
@@ -280,15 +364,14 @@ export default function BeauteSpaCenter() {
   }, [testimonials.length]);
 
   // Functions
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // ORIGINAL API METHOD - KEPT
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
@@ -358,7 +441,7 @@ ${formData.phone}`;
     window.open(`https://wa.me/33123456789?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -367,7 +450,7 @@ ${formData.phone}`;
   };
 
   const generateTimeSlots = () => {
-    const slots = [];
+    const slots: string[] = [];
     for (let hour = 9; hour < 21; hour++) {
       for (const minute of ['00', '30']) {
         slots.push(`${hour.toString().padStart(2, '0')}:${minute}`);
@@ -784,7 +867,11 @@ ${formData.phone}`;
                   </div>
                 </motion.div>
                 <div className="text-5xl font-light text-gray-900 mb-3 font-serif">
-                  <AnimatedCounter value={stat.value} suffix={stat.suffix || ''} />
+                  {stat.value === '24/7' ? (
+                    <span>{stat.value}</span>
+                  ) : (
+                    <AnimatedCounter value={stat.value} suffix={stat.suffix || ''} />
+                  )}
                 </div>
                 <div className="font-medium text-gray-800 mb-2">{stat.label}</div>
                 <div className="text-sm text-gray-500">{stat.description}</div>
