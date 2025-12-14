@@ -4,28 +4,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Sparkles, Heart, Star, Shield, Clock, Users, Award,
+  Sparkles, Heart, Star, Clock, Users, Award,
   MessageCircle, ChevronDown, Send, ArrowRight, CheckCircle,
-  Phone, Mail, MapPin, Menu, X, Facebook, Instagram, Youtube,
-  Briefcase, Check, Quote as QuoteIcon, Plus, Minus,
-  Calendar, ChevronLeft, ChevronRight, Leaf, Crown,
+  Phone, Mail, MapPin, Menu, X,
+  Briefcase, Check, Calendar, ChevronLeft, ChevronRight, Leaf, Crown,
   Diamond, Gem, Sparkle, Droplet, Flower,
   Instagram as InstagramIcon, Facebook as FacebookIcon,
   Youtube as YoutubeIcon, MapPin as MapPinIcon,
   Clock as ClockIcon, Award as AwardIcon
 } from 'lucide-react';
-
-// Floating Elements Component
-const FloatingElement = ({ children, delay = 0, className = "" }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.6 }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
 
 // Animated Counter Component
 const AnimatedCounter = ({ value, suffix = "" }) => {
@@ -61,16 +48,13 @@ const Quote = ({ className }) => (
 );
 
 export default function BeauteSpaCenter() {
-  // State Management
-  const [activeFaq, setActiveFaq] = useState(null);
+  // State Management - Only keep used states
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [hoveredService, setHoveredService] = useState(null);
   const [activeTreatment, setActiveTreatment] = useState(0);
-  const [selectedPackage, setSelectedPackage] = useState('basic');
   const [isVisible, setIsVisible] = useState(false);
 
   // Form State
@@ -89,7 +73,7 @@ export default function BeauteSpaCenter() {
   // Refs
   const heroRef = useRef(null);
 
-  // Data arrays (same as before, kept for brevity)
+  // Data arrays (same as before, but simplified imports)
   const services = [
     {
       icon: <Sparkle className="w-10 h-10" />,
@@ -840,8 +824,6 @@ ${formData.phone}`;
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -15 }}
-                onHoverStart={() => setHoveredService(idx)}
-                onHoverEnd={() => setHoveredService(null)}
                 className="group relative"
               >
                 <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl`} />
@@ -1194,10 +1176,7 @@ ${formData.phone}`;
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setSelectedPackage(pkg.name.toLowerCase());
-                      scrollToSection('contact');
-                    }}
+                    onClick={() => scrollToSection('contact')}
                     className={`w-full py-4 rounded-full font-medium shadow-lg ${
                       pkg.popular 
                         ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-xl' 
